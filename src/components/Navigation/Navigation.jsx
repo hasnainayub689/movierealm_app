@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -9,10 +9,15 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Drawer from '@mui/material/Drawer';
+import Sidebar from '../Sidebar/Sidebar';
 
 function Navigation() {
     const theme = useTheme();
     const isAuthenticated = true;
+    const isMobile = useMediaQuery('(max-width:650px)');
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
         <>
@@ -49,7 +54,7 @@ function Navigation() {
                             <Button
                                 color="inherit"
                                 to={`/profile/:id`}
-                                className=""
+                                className=" hover:text-white "
                                 onClick={() => {}}
                             >
                                 <div className="sm:hidden">
@@ -63,16 +68,45 @@ function Navigation() {
                         )}
                     </div>
                     <div className="lg:block">...Search</div>
-                    <div className="flex items-center">
-                        <div className="hidden lg:block">My Movies &nbsp;</div>
-                        <Avatar
-                            className="hidden lg:block"
-                            alt="profile"
-                            src="https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg"
-                        />
-                    </div>
+                    {!isMobile ? (
+                        <div className="flex items-center">
+                            <div className="hidden lg:block">
+                                My Movies &nbsp;
+                            </div>
+                            <Avatar
+                                className="hidden lg:block"
+                                alt="profile"
+                                src="https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg"
+                            />
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                 </Toolbar>
             </AppBar>
+            <div>
+                <nav className="">
+                    {isMobile ? (
+                        <Drawer
+                            variant="temporary"
+                            anchor="right"
+                            open={mobileOpen}
+                            ModalProps={{ keepMounted: true }}
+                            className=" sm:block w-60 "
+                        >
+                            <Sidebar setMobileOpen={setMobileOpen} />
+                        </Drawer>
+                    ) : (
+                        <Drawer
+                            className="  w-60  flex-shrink-0 "
+                            variant="permanent"
+                            open={open}
+                        >
+                            <Sidebar setMobileOpen={setMobileOpen} />
+                        </Drawer>
+                    )}
+                </nav>
+            </div>
         </>
     );
 }
